@@ -1854,8 +1854,9 @@ struct to_ir {
   // in place op, and throw error for other unsupported types
   void emitAugAssignmentToSelectVar(const AugAssign& stmt) {
     const auto lhs = Select(stmt.lhs());
-    const auto lhsSugaredVar =
-        environment_stack->getSugaredVar(Var(lhs.value()).name());
+    auto lhsSugaredVar = emitSugaredExpr(lhs.value(), 1);
+    // const auto lhsSugaredVar =
+    //     environment_stack->getSugaredVar(Var(lhs.value()).name());
     const auto lhsValue =
         lhsSugaredVar->attr(lhs.range(), method, lhs.selector().name())
             ->asValue(lhs.range(), method);
@@ -1871,11 +1872,16 @@ struct to_ir {
           {rhs},
           {},
           self);
-
     } else {
-      throw ErrorReport(stmt.lhs())
-          << "left-hand side of augmented assignment to module "
-          << "parameters/buffers can only be tensor types";
+      const auto rhs = NamedValue(stmt.rhs().range(), emitExpr(stmt.rhs())).value(*method.graph());
+      auto rhsValue = emitBuiltinCall(
+          stmt.range(),
+          *method.graph(),
+          getAugOp(stmt, lhsValue->type()),
+          {rhs, lhsValue},
+          {},
+          /*self=*/c10::nullopt);
+      lhsSugaredVar->setAttr(stmt.range(), method, lhs.selector().name(), rhsValue);
     }
   }
 

@@ -5198,6 +5198,24 @@ def foo(x):
             return y[0][1]
         self.checkScript(foo, ((1, [[1, 2], [3, 4]]),))
 
+    def test_nested_aug_assign(self):
+        class Child(nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.x = 2
+
+        class A(nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.child = Child()
+
+            def forward(self):
+                self.child.x += 1
+                return self.child.x
+
+
+        self.checkModule(A(), [])
+
     def test_nested_list_construct(self):
         def foo():
             return [[4]] + [[4, 5]]
