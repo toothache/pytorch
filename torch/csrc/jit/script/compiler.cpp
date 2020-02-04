@@ -1855,8 +1855,6 @@ struct to_ir {
   void emitAugAssignmentToSelectVar(const AugAssign& stmt) {
     const auto lhs = Select(stmt.lhs());
     auto lhsSugaredVar = emitSugaredExpr(lhs.value(), 1);
-    // const auto lhsSugaredVar =
-    //     environment_stack->getSugaredVar(Var(lhs.value()).name());
     const auto lhsValue =
         lhsSugaredVar->attr(lhs.range(), method, lhs.selector().name())
             ->asValue(lhs.range(), method);
