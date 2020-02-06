@@ -730,6 +730,14 @@ Tensor& normal_out_cuda(Tensor& output, double mean, const Tensor& std, Generato
 }
 
 Tensor& normal_out_cuda(Tensor& output, const Tensor& mean, const Tensor& std, Generator* gen) {
+  auto shape = at::infer_size(mean.sizes(), std.sizes());
+  if (output.numel() == 0) {
+    at::native::resize_(output, shape);    
+  }
+
+  TORCH_CHECK(output.sizes().equals(shape), 
+    "output size (", output.sizes(), ") is not the same as broadcasted mean and std size (", shape, ")");
+  
   normal_cuda_(output, 0, 1, gen);
   // NB: addcmul_out copies the tensor to be added into the output.
   // Please look at aten/src/THC/generic/THCTensorMathPointwise.cu
@@ -753,7 +761,7 @@ Tensor normal_cuda(double mean, const Tensor& std, Generator* gen) {
 }
 
 Tensor normal_cuda(const Tensor& mean, const Tensor& std, Generator* gen) {
-  Tensor ret = at::empty_like(mean, LEGACY_CONTIGUOUS_MEMORY_FORMAT);
+  Tensor ret = at::empty({0}, mean.options(), LEGACY_CONTIGUOUS_MEMORY_FORMAT);
   normal_out_cuda(ret, mean, std, gen);
   return ret;
 }
