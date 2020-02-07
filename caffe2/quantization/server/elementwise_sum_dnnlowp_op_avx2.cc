@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include <immintrin.h>
+#include "c10/macros/Macros.h"
 
 namespace caffe2 {
 
@@ -13,7 +14,7 @@ using namespace std;
 constexpr int VLEN = 8;
 
 template <typename T, bool ReluFused>
-void ElementWiseSumAVX2(
+CAFFE2_API void ElementWiseSumAVX2(
     const T* input0,
     const T* input1,
     T* output,

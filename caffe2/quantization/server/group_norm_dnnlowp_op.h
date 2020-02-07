@@ -175,7 +175,7 @@ namespace internal {
 template <typename T>
 void VectorMomentsAVX2(const int N, const T* src, int64_t* sum, int64_t* sumsq);
 
-void ComputeQuantizedFusedParamsAVX2(
+CAFFE2_API void ComputeQuantizedFusedParamsAVX2(
     const int N,
     const int G,
     const int K,

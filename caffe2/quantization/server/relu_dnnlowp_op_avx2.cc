@@ -2,16 +2,17 @@
 #include <cstdint>
 
 #include <immintrin.h>
+#include "c10/macros/Macros.h"
 
 namespace caffe2 {
 
 namespace internal {
 
 template <typename T>
-void ReluAVX2(const int N, const int zero_point, const T* X, T* Y);
+CAFFE2_API void ReluAVX2(const int N, const int zero_point, const T* X, T* Y);
 
 template <>
-void ReluAVX2<uint8_t>(
+CAFFE2_API void ReluAVX2<uint8_t>(
     const int N,
     const int zero_point,
     const uint8_t* X,
@@ -31,7 +32,7 @@ void ReluAVX2<uint8_t>(
 }
 
 template <>
-void ReluAVX2<uint16_t>(
+CAFFE2_API void ReluAVX2<uint16_t>(
     const int N,
     const int zero_point,
     const uint16_t* X,
