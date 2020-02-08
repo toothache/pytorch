@@ -3,6 +3,8 @@
 #include <c10/util/Optional.h>
 #include <ATen/core/TensorBody.h>
 #include <ATen/ExpandUtils.h>
+#include <ATen/NativeFunctions.h>
+#include <ATen/DeviceGuard.h>
 
 namespace at {
 namespace indexing {
