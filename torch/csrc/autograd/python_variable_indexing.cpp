@@ -267,7 +267,7 @@ PyObject* THPVariable_getitem(PyObject* self, PyObject* index) {
     || PySlice_Check(index) \
     || index == Py_Ellipsis \
     || index == Py_None) {
-    return wrap(at::indexing::applySelect(self_, 0, 0));
+    return wrap(self_.select(0, 0));
     // return wrap(at::indexing::handleSimpleTypesInSingleDimIndexingGet(
     //   self_,
     //   traceAndConvertPythonIndexToTensorIndex(self_, index, is_tracing),
