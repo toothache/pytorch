@@ -2,7 +2,6 @@
 
 #include <c10/util/Optional.h>
 #include <ATen/core/TensorBody.h>
-#include <ATen/ATen.h>
 #include <ATen/ExpandUtils.h>
 
 namespace at {
@@ -236,9 +235,9 @@ static inline Tensor applySelect(const Tensor& self, int64_t dim, int64_t index,
 static inline Tensor boolToIndexingTensor(const Tensor& self, bool value) {
   // booleans add a dimension of size 1. true indexes this dimension as if 0:, false as empty.
   if (value) {
-    return at::zeros({1}, {}, self.options().dtype(kLong));
+    return at::native::zeros({1}, {}, self.options().dtype(kLong));
   } else {
-    return at::empty({0}, {}, self.options().dtype(kLong));
+    return at::native::empty({0}, {}, self.options().dtype(kLong));
   }
 }
 
